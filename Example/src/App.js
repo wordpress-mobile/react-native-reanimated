@@ -75,6 +75,7 @@ function MainScreen({ navigation }) {
       renderItem={(props) => (
         <MainScreenItem
           {...props}
+          screens={ SCREENS }
           onPressItem={({ key }) => navigation.navigate(key)}
         />
       )}
@@ -88,15 +89,15 @@ MainScreen.navigationOptions = {
   title: '🎬 Reanimated 2.x Examples',
 };
 
-function ItemSeparator() {
+export function ItemSeparator() {
   return <View style={styles.separator} />;
 }
 
-function MainScreenItem({ item, onPressItem }) {
+export function MainScreenItem({ item, onPressItem, screens }) {
   const { key } = item;
   return (
     <RectButton style={styles.button} onPress={() => onPressItem(item)}>
-      <Text style={styles.buttonText}>{SCREENS[key].title || key}</Text>
+      <Text style={styles.buttonText}>{screens[key].title || key}</Text>
     </RectButton>
   );
 }
@@ -130,7 +131,7 @@ const ExampleApp = createSwitchNavigator({
   Reanimated1,
 });
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   list: {
     backgroundColor: '#EFEFF4',
   },
