@@ -81,6 +81,15 @@ project.ext.react = [
   ...
 ```
 
+> **_NOTE:_** In previous releases, we required an additional step which is turning on Turbo Modules.
+> If you are upgrading from alpha.{ <=3 } please remove the following lines:
+> ```Java
+> static {	
+>    ReactFeatureFlags.useTurboModules = true;	
+>  }
+> ```
+>  from `MainActivity.java`.
+
 You can refer [to this diff](https://github.com/software-mansion-labs/reanimated-2-playground/commit/938d494e9512d9fb82c30c23cc80f82c02abd9ea) that presents the set of the above changes made to a fresh react native project in our [Playground repo](https://github.com/software-mansion-labs/reanimated-2-playground).
 
 ## iOS
@@ -165,7 +174,9 @@ If not, after making those changes your app will be compatible with Turbo Module
 
 - (std::unique_ptr<facebook::react::JSExecutorFactory>)jsExecutorFactoryForBridge:(RCTBridge *)bridge
 {
- _turboModuleManager = [[RCTTurboModuleManager alloc] initWithBridge:bridge delegate:self];
+ _turboModuleManager = [[RCTTurboModuleManager alloc] initWithBridge:bridge
+                                                              delegate:self
+                                                             jsInvoker:bridge.jsCallInvoker];
  __weak __typeof(self) weakSelf = self;
  return std::make_unique<facebook::react::JSCExecutorFactory>([weakSelf, bridge](facebook::jsi::Runtime &runtime) {
    if (!bridge) {
@@ -224,12 +235,23 @@ If not, after making those changes your app will be compatible with Turbo Module
 ```objectivec
 - (std::unique_ptr<facebook::react::JSExecutorFactory>)jsExecutorFactoryForBridge:(RCTBridge *)bridge
 {
-  _turboModuleManager = [[RCTTurboModuleManager alloc] initWithBridge:bridge delegate:self];
+  _turboModuleManager = [[RCTTurboModuleManager alloc] initWithBridge:bridge
+                                                              delegate:self
+                                                             jsInvoker:bridge.jsCallInvoker];
 
   #if RCT_DEV
     [_turboModuleManager moduleForName:"RCTDevMenu"]; // <- add
   #endif
   ...
 ```
+
+9. ( Additinal step for React Native 0.62.* ) Change initialization of TurboModuleManager
+```objectivec {3-3}
+- (std::unique_ptr<facebook::react::JSExecutorFactory>)jsExecutorFactoryForBridge:(RCTBridge *)bridge
+{
+  _turboModuleManager = [[RCTTurboModuleManager alloc] initWithBridge:bridge delegate:self];
+  ...
+```
+
 
 You can refer [to this diff](https://github.com/software-mansion-labs/reanimated-2-playground/commit/f6f2b77496bc00601150f98ea19a341f844d06a3) that presents the set of the above changes made to a fresh react native project in our [Playground repo](https://github.com/software-mansion-labs/reanimated-2-playground).
