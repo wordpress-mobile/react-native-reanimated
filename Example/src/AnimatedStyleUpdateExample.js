@@ -3,11 +3,24 @@ import Animated, {
   withTiming,
   useAnimatedStyle,
   Easing,
+  getViewProp,
 } from 'react-native-reanimated';
-import { View, Button } from 'react-native';
-import React from 'react';
+import { View, Button, findNodeHandle } from 'react-native';
+import React, { useRef, useEffect } from 'react';
 
 export default function AnimatedStyleUpdateExample(props) {
+  const ref = useRef();
+
+  useEffect(() => {
+    if (ref.current) {
+      const viewTag = findNodeHandle(ref.current);
+      getViewProp(viewTag, 'sample', propValue => {
+        console.log('here');
+        console.log(propValue === 'myval' ? 'success' : 'fail');
+      });
+    }
+  });
+
   const randomWidth = useSharedValue(10);
 
   const config = {
@@ -39,6 +52,7 @@ export default function AnimatedStyleUpdateExample(props) {
           randomWidth.value = Math.random() * 350;
         }}
       />
+      <View sample="myval" ref={ref} />
     </View>
   );
 }

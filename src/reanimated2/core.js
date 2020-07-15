@@ -1,11 +1,11 @@
 import NativeReanimated from './NativeReanimated';
 
-global.__reanimatedWorkletInit = function (worklet) {
+global.__reanimatedWorkletInit = function(worklet) {
   worklet.__worklet = true;
 };
 
 global._WORKLET = false;
-global._log = function (s) {
+global._log = function(s) {
   console.log(s);
 };
 
@@ -15,6 +15,10 @@ export function runOnUI(worklet) {
 
 export function makeShareable(value) {
   return NativeReanimated.makeShareable(value);
+}
+
+export function getViewProp(viewTag, propName, callback) {
+  return NativeReanimated.getViewProp(viewTag, propName, callback);
 }
 
 function workletValueSetter(value) {
@@ -30,10 +34,10 @@ function workletValueSetter(value) {
   ) {
     // animated set
     const animation = typeof value === 'function' ? value() : value;
-    let callStart = (timestamp) => {
+    let callStart = timestamp => {
       animation.start(animation, this.value, timestamp, previousAnimation);
     };
-    const step = (timestamp) => {
+    const step = timestamp => {
       if (animation.cancelled) {
         animation.callback && animation.callback(false /* finished */);
         return;

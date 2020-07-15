@@ -453,4 +453,12 @@
     }
 }
 
+- (NSString*)obtainProp:(nonnull NSNumber *)viewTag
+               propName:(nonnull NSString *)propName
+{
+    UIView* view = [self.uiManager viewForReactTag:viewTag];
+    // here obtain prop from ui view instance
+    return @"unknown??";
+}
+
 @end
