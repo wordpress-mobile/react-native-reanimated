@@ -33,7 +33,16 @@ export function cancelAnimation(value) {
 
 export function withTiming(toValue, userConfig, callback) {
   'worklet';
-  toValue = (typeof toValue === 'object' && toValue.value) ? toValue.value : toValue
+  // check toValue
+  const valueType = typeof toValue
+  if (valueType !== 'number') {
+    let error = `invalid type of toValue passed to withTiming, expected \`number\`, got \`${ valueType }\``;
+    if (valueType === 'object') {
+      error += ', maybe you forgot to add `.value`?'
+    }
+    throw error;
+  }
+
   return defineAnimation(toValue, () => {
     'worklet';
     const config = {
@@ -96,7 +105,16 @@ export function withTiming(toValue, userConfig, callback) {
 
 export function withSpring(toValue, userConfig, callback) {
   'worklet';
-  toValue = (typeof toValue === 'object' && toValue.value) ? toValue.value : toValue
+  // check toValue
+  const valueType = typeof toValue
+  if (valueType !== 'number') {
+    let error = `invalid type of toValue passed to withSpring, expected \`number\`, got \`${ valueType }\``;
+    if (valueType === 'object') {
+      error += ', maybe you forgot to add `.value`?'
+    }
+    throw error;
+  }
+
   return defineAnimation(toValue, () => {
     'worklet';
 
@@ -212,7 +230,6 @@ export function withSpring(toValue, userConfig, callback) {
 }
 
 export function withDecay(userConfig, callback) {
-  toValue = (typeof toValue === 'object' && toValue.value) ? toValue.value : toValue
   'worklet';
   return defineAnimation(0, () => {
     'worklet';
