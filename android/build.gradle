@@ -3,19 +3,17 @@ def safeExtGet(prop, fallback) {
 }
 
 buildscript {
-    if (project == rootProject) {
-        // The Android Gradle plugin is only required when opening the android folder stand-alone.
-        // This avoids unnecessary downloads and potential conflicts when the library is included as a
-        // module dependency in an application project.
-        repositories {
-            google()
-            jcenter()
-        }
-        dependencies {
-            //noinspection GradleDependency
-            classpath rootProject.ext.has('gradleBuildTools') ? rootProject.ext.get('gradleBuildTools') : 'com.android.tools.build:gradle:3.3.0'
-            classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
-        }
+    // The Android Gradle plugin is only required when opening the android folder stand-alone.
+    // This avoids unnecessary downloads and potential conflicts when the library is included as a
+    // module dependency in an application project.
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        //noinspection GradleDependency
+        classpath rootProject.ext.has('gradleBuildTools') ? rootProject.ext.get('gradleBuildTools') : 'com.android.tools.build:gradle:3.3.0'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
     }
 }
 
